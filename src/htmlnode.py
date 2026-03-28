@@ -19,4 +19,19 @@ class HTMLNODE:
         ##for key, value in self.props.items():
             ##return f' {key} = "{value}"'
     def __repr__(self):
-        return f"tag = {self.tag!r} value = {self.value!r} children = {self.children!r} props = {self.props!r})"
+        return f"tag = {self.tag!r}, value = {self.value!r}, children = {self.children!r}, props = {self.props!r})"
+    
+
+class LEAFNODE(HTMLNODE):
+    def __init__(self, tag, value,props=None):
+        super().__init__(tag, value, None, props)
+
+    def to_html(self):
+        if self.value == None:
+            raise ValueError("Bweh")
+        elif not self.tag:
+            return self.value
+        else:
+            return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+    def __repr__(self):
+        return f"LEAFNODE(tag = {self.tag!r}, value = {self.value!r},  props = {self.props!r})"
