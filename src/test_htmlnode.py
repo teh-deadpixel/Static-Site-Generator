@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNODE, LEAFNODE
+from htmlnode import HTMLNODE, LEAFNODE, PARENTNODE
 
 
 class TesthtmlNode(unittest.TestCase):
@@ -26,6 +26,38 @@ class TestLeafNode(unittest.TestCase):
     def test_MissingValue(self):
         l_node3 = LEAFNODE("p", None)
         self.assertRaises(ValueError, l_node3.to_html)
+
+class TestParentNode(unittest.TestCase):
+    def test_to_html_with_children(self):
+        child_node = LEAFNODE("span", "child")
+        parent_node = PARENTNODE("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LEAFNODE("b", "grandchild")
+        child_node = PARENTNODE("span", [grandchild_node])
+        parent_node = PARENTNODE("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span><b>grandchild</b></span></div>")
+
+    def test_to_html_with_no_tag(self):
+        child_node = LEAFNODE("p","child")
+        parent_node = PARENTNODE(None, [child_node])
+        self.assertRaises(ValueError, parent_node.to_html)
     
+    def test_to_html_with_no_children(self):
+        child_node = LEAFNODE("span", "child")
+        parent_node = PARENTNODE("div",None)
+        self.assertRaises(ValueError, parent_node.to_html)
+
+    def test_to_html_with_multiple_child_types(self):
+        grandchild_node = LEAFNODE(None, "grandchild")
+        child_node = LEAFNODE("span", "child")
+        parent_node = PARENTNODE("div", [child_node, grandchild_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span>grandchild</div>")
+    def test_to_html_with_parent_props(self):
+        child_node = LEAFNODE("p","child")
+        parent_node = PARENTNODE("a", [child_node], {"href": "https://www.google.com"})
+        self.assertEqual(parent_node.to_html(), '<a href="https://www.google.com"><p>child</p></a>')
+
 if __name__ == "__main__":
     unittest.main()
