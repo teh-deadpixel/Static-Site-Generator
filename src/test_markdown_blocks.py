@@ -1,5 +1,5 @@
 import unittest
-from markdown_blocks import markdown_to_blocks
+from markdown_blocks import markdown_to_blocks, block_to_block_type, BlockType
 
 class TestMarkdownToBlocks(unittest.TestCase):
         def test_markdown_to_blocks(self):
@@ -60,6 +60,26 @@ This is the same paragraph on a new line
             blocks = markdown_to_blocks(md)
             self.assertNotIn("", blocks)
                
+class TestBlockToBlocKTypes(unittest.TestCase):
+    def test_heading(self):
+        md = "###### Bleh"
+        block = block_to_block_type(md)
+        self.assertEqual(block, BlockType.HEADING )
+    def test_heading_min_limit(self):
+        md = "####### bleh"
+        block = block_to_block_type(md)
+        self.assertEqual(block, BlockType.PARAGRAPH)
+    def test_code(self):
+         md = "```\nsnek\n```"
+         block = block_to_block_type(md)
+         self.assertEqual(block, BlockType.CODE)
+    def test_code_no_end_ticks(self):
+         md = "```\nsnek\n"
+         block = block_to_block_type(md)
+         self.assertEqual(block, BlockType.PARAGRAPH)
+
+#more testcases to be added
+    
             
 if __name__ == "__main__":
     unittest.main()
