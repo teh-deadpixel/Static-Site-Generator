@@ -90,11 +90,30 @@ def quote_to_html_node(block):
     lines = block.split("\n")
     stripped = []
     for line in lines:
-        stripped.append(line[1:])
+        space_strip = line[1:].strip()
+        stripped.append(space_strip)
     joined_lines = " ".join(stripped)
     html_node = text_to_children(joined_lines)
     parent = PARENTNODE("blockquote", html_node)
     return parent
+"""
+for line in lines:
+        if not line.startswith(">"):
+            raise ValueError("invalid quote block")
+        stripped.append(line.strip(">").strip())
+
+        inner_content = "\n".join(stripped)
+        paragraphs = inner_content.split("\n\n")
+
+        children = []
+        for para in paragraphs:
+            text = para.replace("\n", " ").strip()
+            if text:
+                p_children = text_to_children(text)
+                children.append(PARENTNODE("p", p_children))
+    parent = PARENTNODE("blockquote", children)
+    return parent
+"""
 
 def ulist_to_html_node(block):
     lines = block.split("\n")
