@@ -28,7 +28,7 @@ def generate_page(from_path, template_path, dest_path, basepath):
     if dir:
         os.makedirs(dir, exist_ok = True)
     with open(dest_path, "w") as h:
-        content = h.write(template_content)
+        content = h.write(src_replace)
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     for entry in os.listdir(dir_path_content):
