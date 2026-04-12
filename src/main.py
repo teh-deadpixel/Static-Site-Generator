@@ -3,6 +3,7 @@ from textnode import TextType
 import os
 import shutil
 from gencontent import generate_pages_recursive
+import sys
 
 def copy_static(source, destination):
     if not os.path.exists(destination):
@@ -20,11 +21,18 @@ def copy_static(source, destination):
 def main():
     #node =  TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
     #print(node)
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+    else:
+        basepath = "/"
+        
     source = "static"
-    destination = "public"
+    destination = "docs"
     if os.path.exists(destination):
         shutil.rmtree(destination)
     copy_static(source, destination)
-    generate_pages_recursive("content", "template.html", "public")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
+
+    
 main()
 
