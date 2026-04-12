@@ -2,7 +2,7 @@ from textnode import TextNode
 from textnode import TextType
 import os
 import shutil
-from gencontent import generate_page
+from gencontent import generate_pages_recursive
 
 def copy_static(source, destination):
     if not os.path.exists(destination):
@@ -25,6 +25,6 @@ def main():
     if os.path.exists(destination):
         shutil.rmtree(destination)
     copy_static(source, destination)
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 main()
 
